@@ -1,0 +1,2 @@
+[bandit]
+exclude: .tox,.mypy_cache,/app/settings,/shared/rosetta.py,/shared/env/jinja2.py

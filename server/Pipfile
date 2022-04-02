@@ -1,0 +1,72 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[requires]
+python_version = '3.9'
+
+[dev-packages]
+django-debug-toolbar = "*"
+freezegun = "*"
+coverage = "*"
+flake8 = "*"
+mypy = "*"
+bandit = "*"
+tox = "*"
+pydocstyle = "*"
+ipython = "*"
+pylint = "*"
+autopep8 = "*"
+
+[packages]
+pillow = "*"
+psycopg2-binary = ">=2.8, <2.9"
+jinja2 = "*"
+Django = "==3.2"
+unidecode = "*"
+celery = "*"
+django-jinja = "*"
+django-model-utils = "*"
+django-rosetta = "*"
+django-redis = "*"
+django-vuejs-translate = "*"
+django-composable-views = {git = "https://gitlab.com/preusx/django-composable-views.git", ref = "0.1.0"}
+django-environ = "*"
+gunicorn = {version = "*", sys_platform = "== 'linux'"}
+gevent = {version = "*", sys_platform = "== 'linux'"}
+django-webpack-loader = {git = "https://github.com/Katerinka28/django-webpack-loader"}
+djangorestframework = "*"
+djangorestframework-camel-case = "*"
+drf-orjson-renderer = "*"
+drf-yasg = "*"
+django-rest-auth = "*"
+django-robots = "*"
+django-solo = "*"
+django-ckeditor = "*"
+django-constance = "*" 
+django-ok-images = "*"
+django-versatileimagefield = "*"
+tinify = "*"
+django-jet = {git = "https://github.com/preusx/django-jet"}
+django-awesome-standards = {git = "https://gitlab.com/kastielspb/django-awesome-standards.git",ref = "feature/b_frendly_url"}
+django-des = "*"
+django-filter = "*"
+django-postie = "*"
+django-countries = "*"
+django-polymorphic = "*"
+django-rest-polymorphic = "*"
+django-easy-pdf = "*"
+xhtml2pdf = "*"
+django-utils-six = "*"
+pytest = "*"
+pytest-django = "*"
+pytest-cov = "*"
+pytest-mock = "*"
+pytest-isort = "*"
+mixer = "*"
+black = "*"
+django-migration-linter = "*"
+isort = "*"
+pylama = "*"
+invoke = "*"

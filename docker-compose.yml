@@ -1,0 +1,78 @@
+version: '3'
+
+services:
+  cache:
+    image: redis:alpine
+    # Redis may be already installed on your machine, so default redis ports are changed
+    expose:
+      - 6379
+    networks:
+      devops_try_portal_network:
+
+  db:
+    image: postgres:10.1-alpine
+    container_name: devops_try_db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=db
+    expose:
+      - 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - ./dumps:/var/lib/postgresql/dumps
+    networks:
+      devops_try_portal_network:
+
+
+  backend: &backend
+    build: ./server
+    command: >
+      bash -c "python manage.py migrate
+      && python manage.py runserver 0.0.0.0:8000"
+    environment:
+      - DJANGO_DB_URL=psql://postgres:postgres@db:5432/db
+      - DJANGO_CACHE_URL=redis://cache:6379
+      - CELERY_BROKER_URL=redis://cache:6379
+      # - DEPLOY_BRANCH=dev
+      # - DEPLOY_IP=CHANGE_ME
+      # - DEPLOY_KEY=/code/keys/devops_try
+      # - DEPLOY_PROJECT_ALIAS=devops_try
+    ports:
+      - 8585:8000
+    volumes:
+      - .:/code
+      - ./server:/code/server
+    depends_on:
+      - db
+      - cache
+    links:
+      - db:db
+      - cache:redis
+    networks:
+      devops_try_portal_network:
+
+
+  celery:
+    <<: *backend
+    container_name: devops_try_celery
+    command: bash -c "celery -A app worker -l INFO -B"
+    env_file:
+      - ./server/.env
+    environment:
+      - CELERY_BROKER_URL=redis://cache:6379
+      - DJANGO_DB_URL=psql://postgres:postgres@db:5432/db
+      - DJANGO_CACHE_URL=redis://cache:6379
+    ports: []
+    depends_on:
+      - backend
+    networks:
+      devops_try_portal_network:
+
+
+volumes:
+  postgres_data:
+
+
+networks:
+  devops_try_portal_network:

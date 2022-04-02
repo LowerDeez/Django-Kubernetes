@@ -1,0 +1,31 @@
+{# Template: your_app/templates/admin/base_site.html #}
+{% extends "admin/base.html" %}
+{# {% load static i18n %} #}
+
+{# Setup favicon #}
+{% block extrahead %}
+  <link rel="shortcut icon" type="image/png" href="/static/img/favicon_admin.png"/>
+  <script type="text/javascript" src="/static/js/admin.js"></script>
+{% endblock %}
+{% block extrastyle %}
+  <link rel='stylesheet' media='all' href='/static/css/admin.css'/>
+{% endblock %}
+
+{# Setup browser tab label #}
+{% block title %} 
+  {% with project_name=_("CHANGE ME") %}    
+    {{ title }} |  {{ project_name }}
+  {% endwith %}
+{% endblock %}
+
+{# Setup branding #}
+{% block branding %}
+  {% with project_name=_("CHANGE ME") %}     
+    <h1 id="site-name">
+      <a href="{% url 'admin:index' %}">
+        <img src="/static/img/logo.svg" alt="{{ project_name }}" title="{{ project_name }}" height="auto" width="100%">
+      </a>
+    </h1>
+  {% endwith %}
+{% endblock %}
+

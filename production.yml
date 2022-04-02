@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+  django: &django
+    build:
+      context: .
+      dockerfile: ./compose/production/django/Dockerfile
+    volumes:
+      - static_volume:/code/server/app/static
+      - uploads_volume:/code/server/app/uploads
+    image: 177314787006.dkr.ecr.us-east-1.amazonaws.com/django-ec2:django
+    depends_on:
+      - redis
+    env_file:
+      - ./.envs/.production/.django
+    command: /start
+#    command: >
+#      bash -c "cd server && python manage.py migrate
+#      && gunicorn app.wsgi --bind 0.0.0.0:8000"
+    expose:
+      - 8000
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./compose/production/nginx/Dockerfile
+#    restart: always
+    image: 177314787006.dkr.ecr.us-east-1.amazonaws.com/django-ec2:nginx
+    volumes:
+      - static_volume:/code/server/app/static
+      - uploads_volume:/code/server/app/uploads
+    ports:
+      - 443:443
+      - 80:80
+    depends_on:
+      - django
+    env_file:
+      - ./.envs/.production/.django
+
+  redis:
+    image: redis:6
+
+  celeryworker:
+    <<: *django
+    image: 177314787006.dkr.ecr.us-east-1.amazonaws.com/django-ec2:celeryworker
+    command: bash -c "celery -A server.app worker -l INFO -B"
+    depends_on:
+      - django
+
+
+volumes:
+  static_volume:
+  uploads_volume:
+

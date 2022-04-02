@@ -1,0 +1,56 @@
+{% extends 'admin/base.html' %}
+{% load static i18n %}
+
+
+{% block extrahead %}
+
+    <script src="//www.google.com/jsapi" type="text/javascript"></script>
+    <script type="text/javascript">
+        google.load("jquery", "1.3");
+        {% if rosetta_settings.ENABLE_TRANSLATION_SUGGESTIONS %} google.load("language", "1"); {% endif %}
+        {% include 'rosetta/js/rosetta.js' %}
+    </script>
+    <link rel="shortcut icon" type="image/png" href="/static/img/favicon_admin.png"/>
+{% endblock %}
+
+{% block extrastyle %}
+  <link rel='stylesheet' media='all' href='/static/css/admin.css'/>
+{% endblock %}
+
+
+{# Setup browser tab label #}
+{% block title %} 
+  {% with project_name=_("CHANGE ME") %}    
+    {{ title }} |  {{ project_name }}
+  {% endwith %}
+{% endblock %}
+
+{# Setup branding #}
+{% block branding %}
+  {% with project_name=_("CHANGE ME") %}     
+    <h1 id="site-name">
+      <a href="{% url 'admin:index' %}">
+        <img src="/static/img/logo.svg" alt="{{ project_name }}" title="{{ project_name }}" height="auto" width="100%">
+      </a>
+    </h1>
+  {% endwith %}
+{% endblock %}
+
+
+
+{% block content %}
+    <div id="header">
+        {% block header %}
+        <div id="branding">
+            <h1 id="site-name"><a href="{% url 'rosetta-old-home-redirect' %}">Rosetta</a> </h1>
+        </div>
+        {% endblock %}
+    </div>
+    <div class="breadcrumbs">{% block breadcumbs %}{% endblock %}</div>
+    <div id="content" class="flex">
+        {% block main %}{% endblock %}
+    </div>
+    <div id="footer" class="breadcumbs">
+        <a href="https://github.com/mbi/django-rosetta">Rosetta</a> <span class="version">{{version}}</span>
+    </div>
+{% endblock %}
